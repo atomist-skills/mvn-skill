@@ -28,7 +28,6 @@ import {
 	subscription,
 } from "@atomist/skill";
 import * as fs from "fs-extra";
-import * as path from "path";
 import { extractAnnotations } from "./annotation";
 import { tokenizeArgString } from "./args";
 import { Configuration } from "./configuration";
