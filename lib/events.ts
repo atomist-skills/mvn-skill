@@ -193,17 +193,25 @@ const MvnGoalsStep: MvnStep = {
 			? ".mvnw"
 			: "mvn";
 
-		// Run scripts
+		// Run maven
 		const captureLog = childProcess.captureLog();
-		const result = await params.project.spawn(command, args, {
-			env: {
-				...process.env,
-				JAVA_HOME: "/opt/.sdkman/candidates/java/current",
-				PATH: `/opt/.sdkman/candidates/maven/current/bin:/opt/.sdkman/candidates/java/current/bin:${process.env.PATH}`,
+		const result = await params.project.spawn(
+			command,
+			[
+				...args,
+				"-B",
+				"-Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=warn",
+			],
+			{
+				env: {
+					...process.env,
+					JAVA_HOME: "/opt/.sdkman/candidates/java/current",
+					PATH: `/opt/.sdkman/candidates/maven/current/bin:/opt/.sdkman/candidates/java/current/bin:${process.env.PATH}`,
+				},
+				log: captureLog,
+				logCommand: false,
 			},
-			log: captureLog,
-			logCommand: false,
-		});
+		);
 		const annotations = extractAnnotations(captureLog.log);
 		if (result.status !== 0 || annotations.length > 0) {
 			const home = process.env.ATOMIST_HOME || "/atm/home";
