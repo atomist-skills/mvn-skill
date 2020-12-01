@@ -240,7 +240,7 @@ const MvnGoalsStep: MvnStep = {
 		}
 		params.body.push(`\`${result.cmdString}\` successful`);
 		await params.check.update({
-			conclusion: undefined,
+			conclusion: "success",
 			body: params.body.join("\n\n---\n\n"),
 		});
 		return status.success(
