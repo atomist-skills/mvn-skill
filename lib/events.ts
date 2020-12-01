@@ -181,7 +181,7 @@ const SetupNodeStep: MvnStep = {
 			"bash",
 			[
 				"-c",
-				`source $SDKMAN_DIR/bin/sdkman-init.sh && sdk java home ${cfg.version}`,
+				`source $SDKMAN_DIR/bin/sdkman-init.sh && sdk home java ${cfg.version}`,
 			],
 			{
 				log: captureLog,
