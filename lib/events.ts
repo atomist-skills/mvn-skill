@@ -198,7 +198,7 @@ const MvnGoalsStep: MvnStep = {
 		const result = await params.project.spawn(command, args, {
 			env: {
 				...process.env,
-				JAVA_HOME: "/opt/.sdkman/candidates/maven/current",
+				JAVA_HOME: "/opt/.sdkman/candidates/java/current",
 				PATH: `/opt/.sdkman/candidates/maven/current/bin:/opt/.sdkman/candidates/java/current/bin:${process.env.PATH}`,
 			},
 			log: captureLog,
