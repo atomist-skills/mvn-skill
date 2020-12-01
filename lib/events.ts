@@ -27,6 +27,7 @@ import {
 	Step,
 	subscription,
 } from "@atomist/skill";
+import { WritableLog } from "@atomist/skill/src/lib/child_process";
 import * as fs from "fs-extra";
 import { extractAnnotations } from "./annotation";
 import { tokenizeArgString } from "./args";
@@ -194,7 +195,7 @@ const MvnGoalsStep: MvnStep = {
 			: "mvn";
 
 		// Run maven
-		const captureLog = childProcess.captureLog();
+		const log = captureLog();
 		const result = await params.project.spawn(
 			command,
 			[
@@ -208,14 +209,14 @@ const MvnGoalsStep: MvnStep = {
 					JAVA_HOME: "/opt/.sdkman/candidates/java/current",
 					PATH: `/opt/.sdkman/candidates/maven/current/bin:/opt/.sdkman/candidates/java/current/bin:${process.env.PATH}`,
 				},
-				log: captureLog,
+				log,
 				logCommand: false,
 			},
 		);
-		const annotations = extractAnnotations(captureLog.log);
+		const annotations = extractAnnotations(log.log);
 		if (result.status !== 0 || annotations.length > 0) {
 			const home = process.env.ATOMIST_HOME || "/atm/home";
-			result.stderr = captureLog.log;
+			result.stderr = log.log;
 			params.body.push(spawnFailure(result));
 			await params.check.update({
 				conclusion: "failure",
@@ -270,3 +271,22 @@ export const handler: EventHandler<
 		],
 		parameters: { body: [] },
 	});
+
+export function captureLog(): WritableLog & { log: string } {
+	const logLines = [];
+	return {
+		write: (msg): void => {
+			console.log(">>>" + msg + "<<<");
+			//let line = msg;
+			//if (line.endsWith("\n")) {
+			//	line = line.slice(0, -1);
+			//}
+			//const lines = line.split("\n");
+			//lines.forEach(l => debug(l.trimRight()));
+			logLines.push(msg);
+		},
+		get log() {
+			return logLines.join("");
+		},
+	};
+}
