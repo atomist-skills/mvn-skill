@@ -38,8 +38,6 @@ import { spawnFailure, statusReason } from "./status";
 interface MvnParameters {
 	project: project.Project;
 	check: github.Check;
-	path: string;
-	javaHome: string;
 	body: string[];
 }
 
@@ -157,7 +155,7 @@ const SetupNodeStep: MvnStep = {
 		const commit = eventCommit(ctx.data);
 		const cfg = ctx.configuration?.parameters;
 		// Set up jdk
-		let result = await params.project.spawn("bash", [
+		const result = await params.project.spawn("bash", [
 			"-c",
 			`source $SDKMAN_DIR/bin/sdkman-init.sh && sdk install java ${cfg.version}`,
 		]);
@@ -176,34 +174,6 @@ const SetupNodeStep: MvnStep = {
 			);
 		}
 
-		const captureLog = childProcess.captureLog();
-		result = await params.project.spawn(
-			"bash",
-			[
-				"-c",
-				`source $SDKMAN_DIR/bin/sdkman-init.sh && sdk home java ${cfg.version}`,
-			],
-			{
-				log: captureLog,
-				logCommand: false,
-			},
-		);
-		params.javaHome = path.dirname(captureLog.log.trim());
-		params.path = path.join(path.dirname(captureLog.log.trim()), "bin");
-		if (result.status !== 0) {
-			params.body.push(spawnFailure(result));
-			await params.check.update({
-				conclusion: "failure",
-				body: params.body.join("\n\n---\n\n"),
-			});
-			return status.failure(
-				statusReason({
-					reason: `\`${result.cmdString}\` failed`,
-					repo,
-					commit,
-				}),
-			);
-		}
 		params.body.push(`Installed JDK version \`${cfg.version}\``);
 		await params.check.update({
 			conclusion: undefined,
@@ -229,8 +199,8 @@ const MvnGoalsStep: MvnStep = {
 		const result = await params.project.spawn(command, args, {
 			env: {
 				...process.env,
-				JAVA_HOME: params.javaHome,
-				PATH: `${params.path}:${process.env.PATH}`,
+				JAVA_HOME: "/opt/.sdkman/candidates/maven/current",
+				PATH: `/opt/.sdkman/candidates/maven/current/bin:/opt/.sdkman/candidates/java/current/bin:${process.env.PATH}`,
 			},
 			log: captureLog,
 			logCommand: false,
