@@ -14,18 +14,20 @@
  * limitations under the License.
  */
 
+import * as _ from "lodash";
+
 const Matchers = [
 	{
 		name: "javac",
 		severity: "error",
 		pattern: [
 			{
-				regexp: "\\[ERROR\\]\\s(.*):\\[([0-9]+),([0-9]+)\\]\\s(.*)",
+				regexp: "\\[(ERROR)\\]\\s(.*):\\[([0-9]+),([0-9]+)\\]\\s(.*)",
 				groups: {
-					path: 1,
-					line: 2,
-					column: 3,
-					severity: 4,
+					path: 2,
+					line: 3,
+					column: 4,
+					severity: 1,
 					message: 5,
 				},
 			},
@@ -62,5 +64,5 @@ export function extractAnnotations(lines: string): Annotation[] {
 			}
 		}
 	}
-	return annotations;
+	return _.uniqBy(annotations, "match");
 }

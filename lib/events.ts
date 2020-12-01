@@ -71,6 +71,13 @@ const LoadProjectStep: MvnStep = {
 			}),
 			process.cwd(),
 		);
+		// const project: project.Project = await ctx.project.clone(
+		// 	repository.gitHub({
+		// 		owner: repo.owner,
+		// 		repo: repo.name,
+		// 		credential,
+		// 	}),
+		// );
 		params.project = project;
 
 		return status.success();
@@ -196,23 +203,15 @@ const MvnGoalsStep: MvnStep = {
 
 		// Run maven
 		const log = captureLog();
-		const result = await params.project.spawn(
-			command,
-			[
-				...args,
-				"-B",
-				"-Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=warn",
-			],
-			{
-				env: {
-					...process.env,
-					JAVA_HOME: "/opt/.sdkman/candidates/java/current",
-					PATH: `/opt/.sdkman/candidates/maven/current/bin:/opt/.sdkman/candidates/java/current/bin:${process.env.PATH}`,
-				},
-				log,
-				logCommand: false,
+		const result = await params.project.spawn(command, args, {
+			env: {
+				...process.env,
+				JAVA_HOME: "/opt/.sdkman/candidates/java/current",
+				PATH: `/opt/.sdkman/candidates/maven/current/bin:/opt/.sdkman/candidates/java/current/bin:${process.env.PATH}`,
 			},
-		);
+			log,
+			logCommand: false,
+		});
 		const annotations = extractAnnotations(log.log);
 		if (result.status !== 0 || annotations.length > 0) {
 			const home = process.env.ATOMIST_HOME || "/atm/home";
@@ -276,13 +275,7 @@ export function captureLog(): WritableLog & { log: string } {
 	const logLines = [];
 	return {
 		write: (msg): void => {
-			console.log(">>>" + msg + "<<<");
-			//let line = msg;
-			//if (line.endsWith("\n")) {
-			//	line = line.slice(0, -1);
-			//}
-			//const lines = line.split("\n");
-			//lines.forEach(l => debug(l.trimRight()));
+			process.stdout.write(msg);
 			logLines.push(msg);
 		},
 		get log() {
