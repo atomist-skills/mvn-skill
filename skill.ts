@@ -116,6 +116,7 @@ export const Skill = skill<
 			description:
 				"Cache and restore file system content between executions of this skill",
 			required: false,
+			defaultValue: [".m2/**"],
 			visibility: ParameterVisibility.Advanced,
 		},
 		repos: parameter.repoFilter(),

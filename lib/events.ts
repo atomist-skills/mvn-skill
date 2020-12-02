@@ -201,6 +201,11 @@ const MvnGoalsStep: MvnStep = {
 			? ".mvnw"
 			: "mvn";
 
+		// Set the repository location so that caching can pick it up
+		if (!args.some(a => a.includes("-Dmaven.repo.local"))) {
+			args.push(`-Dmaven.repo.local=.m2`);
+		}
+
 		// Run maven
 		const log = captureLog();
 		const result = await params.project.spawn(command, args, {
