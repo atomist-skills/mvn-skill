@@ -18,6 +18,7 @@ export interface Configuration {
 	mvn?: string;
 	version?: string;
 	command?: string;
+	settings?: string;
 	docker_cache?: string[];
 	subscription_filter: Array<"onPush" | "onTag">;
 }

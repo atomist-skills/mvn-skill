@@ -26,7 +26,7 @@ import {
 import { Configuration } from "./lib/configuration";
 
 export const Skill = skill<
-	Configuration & { repos: any; subscription_filter: any }
+	Configuration & { repos: any; subscription_filter: any; env_map: any }
 >({
 	description: "Run Maven on your Java project",
 	displayName: "Maven",
@@ -34,6 +34,10 @@ export const Skill = skill<
 
 	resourceProviders: {
 		github: resourceProvider.gitHub({ minRequired: 1 }),
+		secret: resourceProvider.secretProvider({
+			minRequired: 0,
+			maxAllowed: undefined,
+		} as any),
 	},
 
 	containers: {
@@ -43,6 +47,13 @@ export const Skill = skill<
 	},
 
 	parameters: {
+		env_map: {
+			type: ParameterType.String,
+			displayName: "",
+			description:
+				"Map selected secrets to environment variables that will be available in the running container",
+			required: false,
+		},
 		subscription_filter: {
 			type: ParameterType.MultiChoice,
 			displayName: "Triggers",
@@ -109,6 +120,13 @@ export const Skill = skill<
 			lineStyle: LineStyle.Multiple,
 			required: false,
 			visibility: ParameterVisibility.Advanced,
+		},
+		settings: {
+			type: ParameterType.String,
+			displayName: "Settings file",
+			description: "Provide a `settings.xml` file that will be used",
+			lineStyle: LineStyle.Multiple,
+			required: false,
 		},
 		docker_cache: {
 			type: ParameterType.StringArray,

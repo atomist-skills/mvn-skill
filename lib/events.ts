@@ -144,8 +144,14 @@ const CommandStep: MvnStep = {
 
 const PrepareStep: MvnStep = {
 	name: "prepare",
+	runWhen: async ctx => !!ctx.configuration?.parameters?.settings,
 	run: async (ctx, params) => {
-		// TODO cd add creds
+		const cfg = ctx.configuration.parameters;
+		await fs.ensureDir(params.project.path(".m2"));
+		await fs.writeFile(
+			params.project.path(".m2", "settings.xml"),
+			cfg.settings,
+		);
 
 		await params.check.update({
 			conclusion: undefined,
@@ -197,26 +203,41 @@ const MvnGoalsStep: MvnStep = {
 		const commit = eventCommit(ctx.data);
 		const cfg = ctx.configuration?.parameters;
 		const args = tokenizeArgString(cfg.mvn || "clean install");
+		const options = [];
 		const command = (await fs.pathExists(params.project.path(".mvnw")))
 			? ".mvnw"
 			: "mvn";
 
 		// Set the repository location so that caching can pick it up
 		if (!args.some(a => a.includes("-Dmaven.repo.local"))) {
-			args.push(`-Dmaven.repo.local=.m2`);
+			options.push(`-Dmaven.repo.local=.m2`);
+		}
+		if (
+			(await fs.pathExists(params.project.path(".m2", "settings.xml"))) &&
+			!args.some(a => a.includes("--settings=")) &&
+			!args.some(a => a === "--settings") &&
+			!args.some(a => a.includes("-s=") && !args.some(a => a === "-s"))
+		) {
+			options.push(
+				`--settings=${params.project.path(".m2", "settings.xml")}`,
+			);
 		}
 
 		// Run maven
 		const log = captureLog();
-		const result = await params.project.spawn(command, args, {
-			env: {
-				...process.env,
-				JAVA_HOME: "/opt/.sdkman/candidates/java/current",
-				PATH: `/opt/.sdkman/candidates/maven/current/bin:/opt/.sdkman/candidates/java/current/bin:${process.env.PATH}`,
+		const result = await params.project.spawn(
+			command,
+			[...options, ...args],
+			{
+				env: {
+					...process.env,
+					JAVA_HOME: "/opt/.sdkman/candidates/java/current",
+					PATH: `/opt/.sdkman/candidates/maven/current/bin:/opt/.sdkman/candidates/java/current/bin:${process.env.PATH}`,
+				},
+				log,
+				logCommand: false,
 			},
-			log,
-			logCommand: false,
-		});
+		);
 		const annotations = extractAnnotations(log.log);
 		if (result.status !== 0 || annotations.length > 0) {
 			const home = process.env.ATOMIST_HOME || "/atm/home";
