@@ -43,7 +43,7 @@ export const Skill = skill<
 	},
 
 	containers: {
-		gradle: {
+		mvn: {
 			image: "gcr.io/atomist-container-skills/mvn-skill",
 		},
 	},
