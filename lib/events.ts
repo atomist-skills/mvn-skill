@@ -271,7 +271,7 @@ const MvnGoalsStep: MvnStep = {
 		});
 		return status.success(
 			statusReason({
-				reason: `Maven build of ${repo.owner}/${repo.name} succeeded`,
+				reason: `Maven build succeeded`,
 				commit,
 				repo,
 			}),

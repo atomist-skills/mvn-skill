@@ -20,10 +20,11 @@ export function spawnFailure(result: {
 	stdout: string;
 	stderr: string;
 }): string {
+	const cmd = result.cmdString.replace(/\/atm\/home ==>> /, "");
 	return (
 		"Failed to run command:\n\n" +
 		"```\n" +
-		`$ ${result.cmdString}\n` +
+		`$ ${cmd}\n` +
 		`${(result.stderr || result.stdout || "").trim()}\n` +
 		"```\n"
 	);
