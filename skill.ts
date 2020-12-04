@@ -31,6 +31,8 @@ export const Skill = skill<
 	description: "Run Maven on your Java project",
 	displayName: "Maven",
 	categories: [Category.DevOps],
+	iconUrl:
+		"https://raw.githubusercontent.com/atomist-skills/mvn-skill/main/docs/images/icon.svg",
 
 	resourceProviders: {
 		github: resourceProvider.gitHub({ minRequired: 1 }),
