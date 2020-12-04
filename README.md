@@ -10,7 +10,7 @@ and the [Atomist documentation site][atomist-doc] for instructions on how to get
 started using Atomist Skills.
 
 [atomist-skill]:
-    https://go.atomist.com/catalog/skills/atomist/npm-build-skill
+    https://go.atomist.com/catalog/skills/atomist/gradle-skill
     "Atomist Skills Catalog - Automate All Your Software Tasks"
 [atomist-doc]: https://docs.atomist.com/ "Atomist Documentation"
 
