@@ -204,8 +204,8 @@ const MvnGoalsStep: MvnStep = {
 		const cfg = ctx.configuration?.parameters;
 		const args = tokenizeArgString(cfg.mvn || "clean install");
 		const options = [];
-		const command = (await fs.pathExists(params.project.path(".mvnw")))
-			? ".mvnw"
+		const command = (await fs.pathExists(params.project.path("mvnw")))
+			? "./mvnw"
 			: "mvn";
 
 		// Set the repository location so that caching can pick it up
