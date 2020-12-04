@@ -50,5 +50,5 @@ export function statusReason(args: {
 }
 
 function trimDirectory(reason: string): string {
-	return reason.replace(/\/atm\/home ==>> /, "");
+	return reason.replace(/\/atm\/home ==> /, "");
 }
