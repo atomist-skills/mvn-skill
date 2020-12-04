@@ -33,7 +33,7 @@ import { extractAnnotations } from "./annotation";
 import { tokenizeArgString } from "./args";
 import { Configuration } from "./configuration";
 import { eventCommit, eventRepo } from "./git";
-import { spawnFailure, statusReason } from "./status";
+import { spawnFailure, statusReason, trimDirectory } from "./status";
 
 interface MvnParameters {
 	project: project.Project;
@@ -133,7 +133,9 @@ const CommandStep: MvnStep = {
 				}),
 			);
 		}
-		params.body.push(`Setup command \`${result.cmdString}\` successful`);
+		params.body.push(
+			`Setup command \`${trimDirectory(result.cmdString)}\` successful`,
+		);
 		await params.check.update({
 			conclusion: undefined,
 			body: params.body.join("\n\n---\n\n"),
@@ -264,7 +266,7 @@ const MvnGoalsStep: MvnStep = {
 				}),
 			);
 		}
-		params.body.push(`\`${result.cmdString}\` successful`);
+		params.body.push(`\`${trimDirectory(result.cmdString)}\` successful`);
 		await params.check.update({
 			conclusion: "success",
 			body: params.body.join("\n\n---\n\n"),
