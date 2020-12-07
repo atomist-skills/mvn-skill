@@ -26,7 +26,12 @@ import {
 import { Configuration } from "./lib/configuration";
 
 export const Skill = skill<
-	Configuration & { repos: any; subscription_filter: any; env_map: any }
+	Configuration & {
+		repos: any;
+		subscription_filter: any;
+		env_map: any;
+		ref_filter: any;
+	}
 >({
 	description: "Run Maven on your Java project",
 	displayName: "Maven",
@@ -114,6 +119,17 @@ export const Skill = skill<
 			defaultValue: "11.0.9.hs-adpt",
 			required: false,
 		},
+		settings: {
+			type: ParameterType.String,
+			displayName: "Settings file",
+			description: "Provide a `settings.xml` file that will be used",
+			lineStyle: LineStyle.Multiple,
+			required: false,
+		},
+		ref_filter: {
+			...parameter.refFilter(),
+			visibility: ParameterVisibility.Advanced,
+		},
 		command: {
 			type: ParameterType.String,
 			displayName: "Shell command",
@@ -122,13 +138,6 @@ export const Skill = skill<
 			lineStyle: LineStyle.Multiple,
 			required: false,
 			visibility: ParameterVisibility.Advanced,
-		},
-		settings: {
-			type: ParameterType.String,
-			displayName: "Settings file",
-			description: "Provide a `settings.xml` file that will be used",
-			lineStyle: LineStyle.Multiple,
-			required: false,
 		},
 		docker_cache: {
 			type: ParameterType.StringArray,
