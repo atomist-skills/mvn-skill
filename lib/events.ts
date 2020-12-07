@@ -204,11 +204,17 @@ const MvnGoalsStep: MvnStep = {
 		const repo = eventRepo(ctx.data);
 		const commit = eventCommit(ctx.data);
 		const cfg = ctx.configuration?.parameters;
-		const args = tokenizeArgString(cfg.mvn || "clean install");
+		let args = tokenizeArgString(cfg.mvn || "clean install");
 		const options = [];
-		const command = (await fs.pathExists(params.project.path("mvnw")))
+		let command = (await fs.pathExists(params.project.path("mvnw")))
 			? "./mvnw"
 			: "mvn";
+
+		// Deal with user provided command in the args parameter
+		if (args[0] === "mvn" || args[0] === "./mvnw") {
+			command = args[0];
+			args = args.slice(1);
+		}
 
 		// Set the repository location so that caching can pick it up
 		if (!args.some(a => a.includes("-Dmaven.repo.local"))) {
