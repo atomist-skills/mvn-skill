@@ -95,13 +95,15 @@ const ValidateStep: MvnStep = {
 		}
 
 		// raise the check
-		const commit = eventCommit(ctx.data);
-		params.check = await github.createCheck(ctx, params.project.id, {
-			sha: commit.sha,
-			title: "mvn",
-			name: `${ctx.skill.name}/${ctx.configuration?.name}`,
-			body: "Running Maven build",
-		});
+		if (ctx.configuration?.parameters?.check) {
+			const commit = eventCommit(ctx.data);
+			params.check = await github.createCheck(ctx, params.project.id, {
+				sha: commit.sha,
+				title: "mvn",
+				name: `${ctx.skill.name}/${ctx.configuration?.name}`,
+				body: "Running Maven build",
+			});
+		}
 		params.body = [];
 
 		return status.success();
@@ -121,7 +123,7 @@ const CommandStep: MvnStep = {
 		);
 		if (result.status !== 0) {
 			params.body.push(spawnFailure(result));
-			await params.check.update({
+			await params.check?.update({
 				conclusion: "failure",
 				body: params.body.join("\n\n---\n\n"),
 			});
@@ -136,7 +138,7 @@ const CommandStep: MvnStep = {
 		params.body.push(
 			`Setup command \`${trimDirectory(result.cmdString)}\` successful`,
 		);
-		await params.check.update({
+		await params.check?.update({
 			conclusion: undefined,
 			body: params.body.join("\n\n---\n\n"),
 		});
@@ -155,7 +157,7 @@ const PrepareStep: MvnStep = {
 			cfg.settings,
 		);
 
-		await params.check.update({
+		await params.check?.update({
 			conclusion: undefined,
 			body: params.body.join("\n\n---\n\n"),
 		});
@@ -176,7 +178,7 @@ const SetupNodeStep: MvnStep = {
 		]);
 		if (result.status !== 0) {
 			params.body.push(spawnFailure(result));
-			await params.check.update({
+			await params.check?.update({
 				conclusion: "failure",
 				body: params.body.join("\n\n---\n\n"),
 			});
@@ -190,7 +192,7 @@ const SetupNodeStep: MvnStep = {
 		}
 
 		params.body.push(`Installed JDK version \`${cfg.version}\``);
-		await params.check.update({
+		await params.check?.update({
 			conclusion: undefined,
 			body: params.body.join("\n\n---\n\n"),
 		});
@@ -251,7 +253,7 @@ const MvnGoalsStep: MvnStep = {
 			const home = process.env.ATOMIST_HOME || "/atm/home";
 			result.stderr = log.log;
 			params.body.push(spawnFailure(result));
-			await params.check.update({
+			await params.check?.update({
 				conclusion: "failure",
 				body: params.body.join("\n\n---\n\n"),
 				annotations: annotations.map(r => ({
@@ -273,7 +275,7 @@ const MvnGoalsStep: MvnStep = {
 			);
 		}
 		params.body.push(`\`${trimDirectory(result.cmdString)}\` successful`);
-		await params.check.update({
+		await params.check?.update({
 			conclusion: "success",
 			body: params.body.join("\n\n---\n\n"),
 		});
