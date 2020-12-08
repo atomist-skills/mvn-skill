@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Added
 
 -   Add support for settings.xml. [#6](https://github.com/atomist-skills/mvn-skill/issues/6)
+-   Add parameter to disable GitHub check. [3204c4f](https://github.com/atomist-skills/mvn-skill/commit/3204c4f5294dcf354d11384552cfa50cbefc1dfa)
 
 ### Fixed
 
