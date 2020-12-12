@@ -29,6 +29,7 @@ import {
 } from "@atomist/skill";
 import { WritableLog } from "@atomist/skill/src/lib/child_process";
 import * as fs from "fs-extra";
+
 import { extractAnnotations } from "./annotation";
 import { tokenizeArgString } from "./args";
 import { Configuration } from "./configuration";
