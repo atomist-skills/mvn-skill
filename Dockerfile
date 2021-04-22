@@ -29,13 +29,8 @@ RUN echo "sdkman_auto_answer=false" > $SDKMAN_DIR/etc/config
 
 # java
 RUN bash -c "source $SDKMAN_DIR/bin/sdkman-init.sh \
-    && sdk install java 15.0.1.hs-adpt  \
-    && sdk install java 14.0.2.hs-adpt  \
-    && sdk install java 13.0.2.hs-adpt  \
-    && sdk install java 12.0.2.hs-adpt  \
-    && sdk install java 11.0.9.hs-adpt  \
-    && sdk install java 8.0.275.hs-adpt  \
-    && sdk default java 11.0.9.hs-adpt"
+    && sdk install java 11.0.11.hs-adpt \
+    && java --version"
 
 RUN bash -c "source $SDKMAN_DIR/bin/sdkman-init.sh \
     && sdk install maven"

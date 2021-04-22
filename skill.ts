@@ -93,8 +93,12 @@ export const Skill = skill<
 			description: "Version of Java to use",
 			options: [
 				{
+					text: "16",
+					value: "16.0.0.hs-adpt",
+				},
+				{
 					text: "15",
-					value: "15.0.1.hs-adpt",
+					value: "15.0.2.hs-adpt",
 				},
 				{
 					text: "14",
@@ -110,14 +114,14 @@ export const Skill = skill<
 				},
 				{
 					text: "11 (default)",
-					value: "11.0.9.hs-adpt",
+					value: "11.0.11.hs-adpt",
 				},
 				{
 					text: "8",
-					value: "8.0.275.hs-adpt",
+					value: "8.0.292.hs-adpt",
 				},
 			],
-			defaultValue: "11.0.9.hs-adpt",
+			defaultValue: "11.0.11.hs-adpt",
 			required: false,
 		},
 		settings: {
