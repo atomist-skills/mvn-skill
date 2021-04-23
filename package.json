@@ -1,10 +1,11 @@
 {
   "name": "@atomist/mvn-skill",
-  "homepage": "https://github.com/atomist-skills/mvn-skill#readme",
+  "homepage": "https://github.com/atomist-skills/mvn-skill",
   "license": "Apache-2.0",
   "author": {
-    "name": "Atomist",
-    "email": "oss@atomist.com"
+    "name": "Atomist, Inc.",
+    "email": "oss@atomist.com",
+    "url": "https://atomist.com"
   },
   "main": "node_modules/@atomist/skill/lib/function.js",
   "directories": {
@@ -26,9 +27,10 @@
     "clean:npm": "rimraf node_modules",
     "clean:run": "rimraf *-v8.log profile.txt log",
     "clean:test": "rimraf .nyc_output coverage",
-    "compile": "run-s compile:ts",
+    "compile": "run-s git:info gql:gen compile:ts",
     "compile:ts": "tsc --project .",
     "doc": "typedoc --mode modules --excludeExternals --ignoreCompilerErrors --exclude \"**/*.d.ts\" --out doc index.ts lib",
+    "git:info": "atm-npm-tools git-info",
     "gql:gen": "atm-skill gql-generate",
     "lint": "run-p lint:eslint lint:prettier",
     "lint:eslint": "eslint --ext .ts .",
@@ -51,6 +53,7 @@
     "fs-extra": "^9.1.0"
   },
   "devDependencies": {
+    "@atomist/npm-tools": "^0.1.1-master.0",
     "@google-cloud/functions-framework": "^1.7.1",
     "@types/fs-extra": "^9.0.11",
     "@types/mocha": "^8.2.2",
