@@ -21,9 +21,10 @@ export type EventSubscription =
 	| subscription.types.OnTagSubscription;
 
 /** Extract commit from event data. */
-export function eventCommit(
-	data: EventSubscription,
-): { sha?: string; url?: string } {
+export function eventCommit(data: EventSubscription): {
+	sha?: string;
+	url?: string;
+} {
 	return (
 		(data as subscription.types.OnPushSubscription).Push?.[0]?.after ||
 		(data as subscription.types.OnTagSubscription).Tag?.[0]?.commit
@@ -31,9 +32,7 @@ export function eventCommit(
 }
 
 /** Extract repo from event data. */
-export function eventRepo(
-	data: EventSubscription,
-): {
+export function eventRepo(data: EventSubscription): {
 	channels?: Array<{ name?: string }>;
 	defaultBranch?: string;
 	name?: string;
