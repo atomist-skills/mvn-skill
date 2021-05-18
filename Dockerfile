@@ -36,6 +36,7 @@ RUN bash -c "source $SDKMAN_DIR/bin/sdkman-init.sh \
     && sdk install maven"
 
 # node
+# atomist:apt-source=deb https://deb.nodesource.com/node_14.x hirsute main
 RUN curl -sL https://deb.nodesource.com/setup_14.x | bash - \
     && apt-get install -y nodejs \
     && rm -rf /var/lib/apt/lists/*
