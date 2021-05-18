@@ -13,14 +13,14 @@ FROM ubuntu:rolling@sha256:be154cc2b1211a9f98f4d708f4266650c9129784d0485d4507d9b
 
 # tools
 RUN apt-get update && apt-get install -y \
-        curl \
-        wget \
-        gnupg \
-        git \
-        build-essential \
-        zip \
-        unzip \
-        && rm -rf /var/lib/apt/lists/*
+    build-essential=12.8ubuntu3 \
+    curl=7.74.0-1ubuntu2 \
+    git=1:2.30.2-1ubuntu1 \
+    gnupg=2.2.20-1ubuntu3 \
+    unzip=6.0-26ubuntu1 \
+    wget=1.21-1ubuntu3 \
+    zip=3.0-12 \
+ && rm -rf /var/lib/apt/lists/*
 
 # sdkman
 ENV SDKMAN_DIR /opt/.sdkman
