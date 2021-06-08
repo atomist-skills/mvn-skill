@@ -54,7 +54,7 @@
   },
   "devDependencies": {
     "@atomist/npm-tools": "^0.1.1-main.0",
-    "@google-cloud/functions-framework": "^1.7.1",
+    "@google-cloud/functions-framework": "^1.8.0",
     "@types/fs-extra": "^9.0.11",
     "@types/mocha": "^8.2.2",
     "@types/power-assert": "^1.5.3",
